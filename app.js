@@ -48,7 +48,7 @@ const connPool = mysql.createPool({
 
 
 /* global vars relevant to the app/ slack relationship */
-/* focus channel aka the channel id (void_), only listening in one channel */
+/* focus channel aka the channel id, only listening in one channel */
 const focus_channel = 'C0501V4HLH1'; 
 const yak = 'B04UW0K02TE';
 
@@ -99,8 +99,8 @@ async function postMessage(c){
 /* function to add a user to the database. silently ignore the errors of data existing in the db */
 function addUserToDb(c){
 
-    let addUserQuery = 'INSERT IGNORE INTO users (userID, userName) VALUES(?,?);';
-    let addUserQuerySani = [c.user_id, c.user_name];
+    const addUserQuery = 'INSERT IGNORE INTO users (userID, userName) VALUES(?,?);';
+    const addUserQuerySani = [c.user_id, c.user_name];
 
     connPool.query(addUserQuery, addUserQuerySani, (err, res) => {
         if (err){
