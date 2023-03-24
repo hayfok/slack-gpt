@@ -149,10 +149,7 @@ app.event('message', async ({ event, client }) => {
     }
 
     
-    /* really hacky - if the event has a thread timestamp. 
-       this is less than ideal because it accounts for all
-       threaded comment chains, not just the one i care about...
-       have to fix this */
+    /* really hacky - if the event has a thread timestamp. */
     if (event.thread_ts){
         if (event.bot_id != yak){
             gpt(event.user, event.text, client, event.thread_ts)
@@ -160,8 +157,7 @@ app.event('message', async ({ event, client }) => {
     }
 
     
-    /* compute and return the num of tokens and estimate of the price. 
-       all data is stored in memory. TO-DO: add a database. */
+    /* compute and return the num of tokens and estimate of the price. */
     if (event.text == '!cost'){
         let costQuery = 'SELECT * FROM tokens';
         connPool.query(costQuery, (err, res) => {
@@ -184,7 +180,7 @@ this roughy equates to a total price of $${cost}`,
 /* function that selects content from the database to feed gpt as a convo history, unique per session */
 function dbReadThenRequest(client, ts){
     /* convo history time using the database */
-    const sessionHistoryQuery = 'SELECT role, content FROM session WHERE sessionID = ? LIMIT 10;';
+    const sessionHistoryQuery = 'SELECT role, content FROM session WHERE sessionID = ? ORDER BY RID DESC LIMIT 10;';
     const sessionHistoryQuerySani = [ts]
     connPool.query(sessionHistoryQuery, sessionHistoryQuerySani, (err, res) => {
         if (err) {
@@ -292,14 +288,6 @@ function replyInThread(res, client, ts){
 
       
 }
-
-
-/* take care of this later */
-// app.event('member_joined_channel', async ( event, say ) => {
-//     if(event.channel = focus_channel){
-//         say(`welcome`)
-//     }
-// })
 
 
 /* starts program loop */
