@@ -1,7 +1,7 @@
 # slack-gpt
 allows turbo3.5 into slack, complete with message persistance in a mysql database
 
-!disclaimer: not meant for production use
+This is meant to be demonstrative in the event someone wants to take note from a working application
 
 db schemas:
 
